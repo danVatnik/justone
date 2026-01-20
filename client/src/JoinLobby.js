@@ -14,7 +14,7 @@ function JoinLobby({ onJoinLobby }) {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/api/lobby/join', {
+      const response = await fetch('/api/lobby/join', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: name.trim() })
@@ -35,7 +35,7 @@ function JoinLobby({ onJoinLobby }) {
   const handleReset = async () => {
     if (window.confirm('Are you sure you want to reset the lobby? All players will be removed.')) {
       try {
-        const response = await fetch('http://localhost:3001/api/lobby/reset', {
+        const response = await fetch('/api/lobby/reset', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }
         });

@@ -27,7 +27,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
 
   const fetchGameState = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/game/state?playerId=${playerId}`);
+      const response = await fetch(`/api/game/state?playerId=${playerId}`);
       if (response.ok) {
         const data = await response.json();
         setGuesser(data.guesser);
@@ -52,7 +52,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
 
   const handleGenerateWords = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/game/new-words', {
+      const response = await fetch('/api/game/new-words', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -68,7 +68,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
 
   const handleSelectWord = async (selectedWord) => {
     try {
-      const response = await fetch('http://localhost:3001/api/game/select-word', {
+      const response = await fetch('/api/game/select-word', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ word: selectedWord })
@@ -91,7 +91,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/api/game/submit-word', {
+      const response = await fetch('/api/game/submit-word', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ playerId, word: wordInput.trim() })
@@ -114,7 +114,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
 
     try {
       const wordList = Array.from(selectedWords);
-      const response = await fetch('http://localhost:3001/api/game/remove-words', {
+      const response = await fetch('/api/game/remove-words', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ words: wordList })
@@ -131,7 +131,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
 
   const handleConfirmWords = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/game/confirm-words', {
+      const response = await fetch('/api/game/confirm-words', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ playerId })
@@ -148,7 +148,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
 
   const handleGuesserDone = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/game/guesser-done', {
+      const response = await fetch('/api/game/guesser-done', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ playerId })
@@ -171,7 +171,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/api/game/clue', {
+      const response = await fetch('/api/game/clue', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ playerId, clue: clueInput.trim() })
@@ -194,7 +194,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/api/game/guess', {
+      const response = await fetch('/api/game/guess', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ playerId, guess: guessInput.trim() })
@@ -211,7 +211,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
 
   const handleNextRound = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/game/next-round', {
+      const response = await fetch('/api/game/next-round', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ playerId })
@@ -245,7 +245,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/api/game/remove-clues', {
+      const response = await fetch('/api/game/remove-clues', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ playerIds: Array.from(selectedClues).map(id => parseInt(id)) })
@@ -262,7 +262,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
 
   const handleStartGuessing = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/game/start-guessing', {
+      const response = await fetch('/api/game/start-guessing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });

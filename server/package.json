@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build": "echo \"Server is JS - no build step needed\"",
+    "prod": "NODE_ENV=production node index.js"
   },
   "keywords": [],
   "author": "",
