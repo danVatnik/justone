@@ -1,0 +1,23 @@
+{
+  "name": "just-one",
+  "version": "1.0.0",
+  "description": "A multiplayer word guessing game",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm start --prefix server\" \"npm start --prefix client\"",
+    "start": "concurrently \"npm start --prefix server\" \"npm start --prefix client\"",
+    "server": "npm start --prefix server",
+    "client": "npm start --prefix client",
+    "install-all": "npm install && npm install --prefix server && npm install --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "game",
+    "multiplayer",
+    "word-guessing"
+  ],
+  "author": "",
+  "license": "ISC"
+}

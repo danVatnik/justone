@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+/node_modules
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+/build
+/dist
+*.tgz
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# React
+/client/build
+/client/.env.local
+
+# Server
+/server/node_modules
+
+# OS
+Thumbs.db
+.DS_Store
