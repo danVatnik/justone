@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import PlayerRoles from './PlayerRoles';
+import Header from './Header';
 import './Game.css';
 
 function Game({ playerName, playerId, onLeaveLobby }) {
@@ -285,10 +286,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
   return (
     <>
       <div className="game-container">
-              <header className="app-header">
-        <div className="app-title">Just</div>
-        <button className="leave-button header-leave" onClick={onLeaveLobby}>Leave Game</button>
-      </header>
+        <Header showLeaveButton={true} onLeaveLobby={onLeaveLobby} />
         <div className="game-flex-layout">
         <PlayerRoles
           players={players}

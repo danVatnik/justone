@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
+import Header from './Header';
 import './JoinLobby.css';
-import './Game.css';
 
 function JoinLobby({ onJoinLobby }) {
   const [name, setName] = useState('');
@@ -78,9 +78,7 @@ function JoinLobby({ onJoinLobby }) {
 
   return (
     <>
-      <header className="app-header">
-        <div className="app-title">Just</div>
-      </header>
+      <Header showLeaveButton={false} />
       <div className="join-lobby-container">
         <div className="join-lobby-card">
             <h1>Join Game</h1>

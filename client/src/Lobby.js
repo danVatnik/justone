@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
+import Header from './Header';
 import './Lobby.css';
-import './Game.css';
 
 function Lobby({ playerId, playerName, onStartGame, onLeaveLobby }) {
   const [players, setPlayers] = useState([]);
@@ -92,9 +92,7 @@ function Lobby({ playerId, playerName, onStartGame, onLeaveLobby }) {
 
   return (
     <>
-      <header className="app-header">
-        <div className="app-title">Just</div>
-      </header>
+      <Header showLeaveButton={false} />
       <div className="lobby-container">
       <div className="lobby-card">
         <h1>Game Lobby</h1>
