@@ -23,12 +23,13 @@
 }
 .app-header {
   width: 100vw;
-  background: #4b3ca7;
+  background: transparent;
   color: #fff;
   height: 56px;
   display: flex;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  box-shadow: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   position: fixed;
   top: 0;
   left: 0;
@@ -41,10 +42,10 @@
   background: #fff;
   color: #4b3ca7;
   border: none;
-  border-radius: 20px;
-  padding: 8px 20px;
+  border-radius: 18px;
+  padding: 6px 16px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
   box-shadow: 0 1px 4px rgba(0,0,0,0.07);
   transition: background 0.2s, color 0.2s;
@@ -53,20 +54,7 @@
   background: #e6e6fa;
   color: #2d246b;
 }
-/* App header styles */
-.app-header {
-  width: 100vw;
-  background: #4b3ca7;
-  color: #fff;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-}
+
 
 .app-title {
   font-size: 1.5rem;
@@ -75,9 +63,7 @@
   margin-left: 32px;
 }
 
-.game-container {
-  margin-top: 56px;
-}
+
 .game-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -93,6 +79,7 @@
   align-items: stretch;
   width: 100vw;
   min-height: 100vh;
+  margin-top: 50px
 }
 
 /* Sidebar: add extra left padding for spacing */
@@ -111,8 +98,8 @@
   top: 0;
   /* Remove fixed height, use auto */
   height: auto;
-  max-height: 100vh;
-  overflow-y: visible;
+  max-height: calc(92vh - 32px);
+  overflow-y: auto;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -144,7 +131,7 @@
   margin-bottom: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   /* position: sticky; */
-  top: 57px;
+  top: 50px;
   z-index: 10;
 }
 
@@ -181,8 +168,8 @@
 
 .role-player-name {
   font-weight: 600;
-  color: #333;
-  font-size: 13px;
+  color: #222;
+  font-size: 14px;
 }
 
 .role-badge {
@@ -228,13 +215,15 @@
 
 .game-section h2 {
   margin: 0 0 20px 0;
-  color: #333;
-  font-size: 28px;
+  color: #222;
+  font-size: 32px;
+  font-weight: 700;
 }
 
 .instruction {
-  color: #666;
-  font-size: 16px;
+  color: #444;
+  font-size: 18px;
+  font-weight: 500;
   margin: 0 0 25px 0;
 }
 
@@ -250,7 +239,8 @@
   background: #f5f5f5;
   border: 2px solid #ddd;
   border-radius: 8px;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: 600;
   font-weight: 600;
   color: #333;
   cursor: pointer;
@@ -501,9 +491,30 @@
   font-size: 16px;
 }
 
+.word-submitted {
+  background: #e8f5e9;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #4caf50;
+}
+
+.word-submitted p {
+  margin: 10px 0;
+  color: #1a1a1a !important;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.word-submitted strong {
+  color: #1b5e20;
+  font-size: 20px;
+  font-weight: 700;
+}
+
 .waiting-others {
-  color: #999;
-  font-size: 14px;
+  color: #1a1a1a !important;
+  font-size: 16px;
+  font-weight: 500;
   margin: 10px 0 0 0 !important;
 }
 

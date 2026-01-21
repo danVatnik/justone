@@ -277,43 +277,16 @@ function Game({ playerName, playerId, onLeaveLobby }) {
   };
 
 
-  // Admin is determined by isadmin=true in the URL
-  const isAdmin = (() => {
-    if (typeof window === 'undefined') return false;
-    const params = new URLSearchParams(window.location.search);
-    return params.get('isadmin') === 'true';
-  })();
   const isGuesser = guesser && guesser.id === playerId;
   const isWordSelector = wordSelector && wordSelector.id === playerId;
 
-  const handleResetLobby = async () => {
-    if (!window.confirm('Are you sure you want to reset the lobby?')) return;
-    try {
-      const response = await fetch('/api/game/reset-lobby', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playerId })
-      });
-      if (response.ok) {
-        fetchGameState();
-      }
-    } catch (err) {
-      console.error('Error resetting lobby:', err);
-    }
-  };
-
   return (
     <>
-      <header className="app-header">
-        <div className="app-title">Just One</div>
-        <div className="header-actions">
-          {isAdmin && (
-            <button className="reset-button header-reset" onClick={handleResetLobby}>Reset Lobby</button>
-          )}
-          <button className="leave-button header-leave" onClick={onLeaveLobby}>Leave Game</button>
-        </div>
-      </header>
       <div className="game-container">
+              <header className="app-header">
+        <div className="app-title">Just One</div>
+        <button className="leave-button header-leave" onClick={onLeaveLobby}>Leave Game</button>
+      </header>
         <div className="game-flex-layout">
         <PlayerRoles
           players={players}
@@ -362,17 +335,26 @@ function Game({ playerName, playerId, onLeaveLobby }) {
         {gameState === 'word-submission' && !isGuesser && (
           <div className="game-section">
             <h2>The Word is: <span className="selected-word">{word}</span></h2>
-            <p className="instruction">Enter a word related to it:</p>
-            <input 
-              type="text" 
-              value={wordInput}
-              onChange={(e) => setWordInput(e.target.value)}
-              placeholder="Enter your word..." 
-              className="word-submission-input"
-              maxLength="30"
-              autoFocus
-            />
-            <button onClick={handleSubmitWord} className="submit-button">Submit Word</button>
+            {submittedWords[playerId] ? (
+              <div className="word-submitted">
+                <p>✓ Your word: <strong>{submittedWords[playerId]}</strong></p>
+                <p className="waiting-others">Waiting for other players...</p>
+              </div>
+            ) : (
+              <>
+                <p className="instruction">Enter a word related to it:</p>
+                <input 
+                  type="text" 
+                  value={wordInput}
+                  onChange={(e) => setWordInput(e.target.value)}
+                  placeholder="Enter your word..." 
+                  className="word-submission-input"
+                  maxLength="30"
+                  autoFocus
+                />
+                <button onClick={handleSubmitWord} className="submit-button">Submit Word</button>
+              </>
+            )}
           </div>
         )}
 

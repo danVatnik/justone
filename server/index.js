@@ -30,7 +30,13 @@ const nouns = [
   'castle', 'dolphin', 'tornado', 'sunset', 'puzzle', 'marble', 'whistle', 'anchor',
   'diamond', 'meteor', 'canyon', 'island', 'forest', 'wizard', 'phoenix', 'thunder',
   'galaxy', 'pyramid', 'mansion', 'fortress', 'temple', 'bridge', 'waterfall', 'desert',
-  'ocean', 'jungle', 'meadow', 'garden', 'palace', 'cavern', 'canyon', 'glacier'
+  'ocean', 'jungle', 'meadow', 'garden', 'palace', 'cavern', 'canyon', 'glacier',
+  'rocket', 'saxophone', 'umbrella', 'hammer', 'candle', 'mirror', 'camera', 'compass',
+  'dragon', 'unicorn', 'treasure', 'pirate', 'robot', 'ninja', 'knight', 'astronaut',
+  'violin', 'drums', 'piano', 'trumpet', 'flute', 'accordion', 'harmonica', 'tambourine',
+  'helicopter', 'submarine', 'parachute', 'airplane', 'skateboard', 'surfboard', 'snowboard', 'kayak',
+  'campfire', 'tent', 'lantern', 'backpack', 'map', 'binoculars', 'telescope', 'microscope',
+  'magnet', 'battery', 'flashlight', 'thermometer', 'hourglass', 'clock', 'calendar', 'compass'
 ];
 
 function getRandomWords(count = 5) {
@@ -105,6 +111,9 @@ app.post('/api/lobby/start', (req, res) => {
   if (!players.every(p => p.isReady)) {
     return res.status(400).json({ error: 'Not all players are ready' });
   }
+
+  // Randomly shuffle players when game starts
+  players = players.sort(() => Math.random() - 0.5);
 
   // Initialize game state
   gameStarted = true;
