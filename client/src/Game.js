@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import PlayerRoles from './PlayerRoles';
 import './Game.css';
 
 function Game({ playerName, playerId, onLeaveLobby }) {
@@ -275,42 +276,52 @@ function Game({ playerName, playerId, onLeaveLobby }) {
     }
   };
 
+
+  // Admin is determined by isadmin=true in the URL
+  const isAdmin = (() => {
+    if (typeof window === 'undefined') return false;
+    const params = new URLSearchParams(window.location.search);
+    return params.get('isadmin') === 'true';
+  })();
   const isGuesser = guesser && guesser.id === playerId;
   const isWordSelector = wordSelector && wordSelector.id === playerId;
 
+  const handleResetLobby = async () => {
+    if (!window.confirm('Are you sure you want to reset the lobby?')) return;
+    try {
+      const response = await fetch('/api/game/reset-lobby', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ playerId })
+      });
+      if (response.ok) {
+        fetchGameState();
+      }
+    } catch (err) {
+      console.error('Error resetting lobby:', err);
+    }
+  };
+
   return (
-    <div className="game-container">
-      <div className="game-header">
-        <h1>Just One - Game</h1>
-        <div className="game-info">
-          <span className="round">Round {round}</span>
-          <span className="player-name">{playerName}</span>
+    <>
+      <header className="app-header">
+        <div className="app-title">Just One</div>
+        <div className="header-actions">
+          {isAdmin && (
+            <button className="reset-button header-reset" onClick={handleResetLobby}>Reset Lobby</button>
+          )}
+          <button className="leave-button header-leave" onClick={onLeaveLobby}>Leave Game</button>
         </div>
-      </div>
-
-      <div className="player-roles">
-        <div className="roles-title">Player Roles</div>
-        <div className="roles-list">
-          {players.map(player => {
-            let role = 'Editor';
-            if (guesser && guesser.id === player.id) {
-              role = 'Guesser';
-            } else if (wordSelector && wordSelector.id === player.id) {
-              role = 'Word Selector';
-            }
-            
-            const isCurrentPlayer = player.id === playerId;
-            return (
-              <div key={player.id} className={`role-item ${isCurrentPlayer ? 'current-player' : ''}`}>
-                <span className="role-player-name">{player.name}</span>
-                <span className={`role-badge role-${role.toLowerCase().replace(' ', '-')}`}>{role}</span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="game-content">
+      </header>
+      <div className="game-container">
+        <div className="game-flex-layout">
+        <PlayerRoles
+          players={players}
+          playerId={playerId}
+          guesser={guesser}
+          wordSelector={wordSelector}
+        />
+        <div className="game-content">
         {gameState === 'waiting' && (
           <div className="game-section">
             <h2>Game Starting...</h2>
@@ -592,12 +603,11 @@ function Game({ playerName, playerId, onLeaveLobby }) {
             <button onClick={handleNextRound} className="next-button">Next Round</button>
           </div>
         )}
+        </div>
       </div>
-
-      <div className="game-footer">
-        <button className="leave-button" onClick={onLeaveLobby}>Leave Game</button>
+        {/* Footer removed: Leave Game button is now in header */}
       </div>
-    </div>
+    </>
   );
 }
 

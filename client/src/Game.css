@@ -1,3 +1,83 @@
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 32px;
+}
+
+.header-reset {
+  background: #fff;
+  color: #d7263d;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  transition: background 0.2s, color 0.2s;
+}
+.header-reset:hover {
+  background: #ffe6e6;
+  color: #a81b2b;
+}
+.app-header {
+  width: 100vw;
+  background: #4b3ca7;
+  color: #fff;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  justify-content: space-between;
+}
+
+.header-leave {
+  margin-right: 32px;
+  background: #fff;
+  color: #4b3ca7;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  transition: background 0.2s, color 0.2s;
+}
+.header-leave:hover {
+  background: #e6e6fa;
+  color: #2d246b;
+}
+/* App header styles */
+.app-header {
+  width: 100vw;
+  background: #4b3ca7;
+  color: #fff;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.app-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-left: 32px;
+}
+
+.game-container {
+  margin-top: 56px;
+}
 .game-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -6,35 +86,46 @@
   flex-direction: column;
 }
 
-.game-header {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
-}
-
-.game-header h1 {
-  margin: 0 0 15px 0;
-  color: #333;
-  text-align: center;
-  font-size: 32px;
-}
-
-.game-info {
+/* Layout: sidebar pinned left, game content right */
+.game-flex-layout {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
+  flex-direction: row;
+  align-items: stretch;
+  width: 100vw;
+  min-height: 100vh;
 }
 
-.round {
-  background: #667eea;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 14px;
+/* Sidebar: add extra left padding for spacing */
+/* Sidebar: add extra left margin for spacing from edge */
+/* Sidebar: height matches number of players, not viewport */
+.player-roles {
+  width: 260px;
+  background: #f7f7fa;
+  border-right: 1px solid #e0e0e0;
+  padding: 24px 32px 16px 32px;
+  margin-left: 12px;
+  margin-top: 32px;
+  box-sizing: border-box;
+  position: fixed;
+  left: 0;
+  top: 0;
+  /* Remove fixed height, use auto */
+  height: auto;
+  max-height: 100vh;
+  overflow-y: visible;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-content {
+  margin-left: 260px;
+  flex: 1;
+  padding: 13px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
 }
 
 .player-name {
@@ -52,6 +143,9 @@
   border-radius: 12px;
   margin-bottom: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* position: sticky; */
+  top: 57px;
+  z-index: 10;
 }
 
 .roles-title {
@@ -117,8 +211,8 @@
 .game-content {
   flex: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center;
+  align-items: center; */
   margin-bottom: 20px;
 }
 

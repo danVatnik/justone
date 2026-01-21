@@ -1,9 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './JoinLobby.css';
 
 function JoinLobby({ onJoinLobby }) {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+  const [players, setPlayers] = useState([]);
+  
+  // Check if isadmin=true in URL
+  const isAdmin = new URLSearchParams(window.location.search).get('isadmin') === 'true';
+
+  // Fetch players list periodically
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        const response = await fetch('/api/lobby/players');
+        if (response.ok) {
+          const data = await response.json();
+          setPlayers(data.players || []);
+        }
+      } catch (err) {
+        console.error('Error fetching players:', err);
+      }
+    };
+
+    fetchPlayers();
+    const interval = setInterval(fetchPlayers, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleJoin = async (e) => {
     e.preventDefault();
@@ -75,7 +98,9 @@ function JoinLobby({ onJoinLobby }) {
           {error && <p className="error-message">{error}</p>}
           <button type="submit" className="join-button">Join Lobby</button>
         </form>
-        <button onClick={handleReset} className="reset-lobby-button">Reset Lobby</button>
+        {isAdmin && players.length > 0 && (
+          <button onClick={handleReset} className="reset-lobby-button">Reset Lobby</button>
+        )}
       </div>
     </div>
   );
