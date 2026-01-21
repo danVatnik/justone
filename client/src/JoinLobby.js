@@ -78,7 +78,7 @@ function JoinLobby({ onJoinLobby }) {
 
   return (
     <>
-      <Header showLeaveButton={false} />
+      <Header showLeaveButton={false} isAdmin={isAdmin} />
       <div className="join-lobby-container">
         <div className="join-lobby-card">
             <h1>Join Game</h1>

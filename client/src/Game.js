@@ -21,6 +21,9 @@ function Game({ playerName, playerId, onLeaveLobby }) {
   const [selectedClues, setSelectedClues] = useState(new Set());
   const [selectedWords, setSelectedWords] = useState(new Set());
   const [wordRevealed, setWordRevealed] = useState(false);
+  
+  // Check if isadmin=true in URL
+  const isAdmin = new URLSearchParams(window.location.search).get('isadmin') === 'true';
 
   useEffect(() => {
     fetchGameState();
@@ -286,7 +289,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
   return (
     <>
       <div className="game-container">
-        <Header showLeaveButton={true} onLeaveLobby={onLeaveLobby} />
+        <Header showLeaveButton={true} onLeaveLobby={onLeaveLobby} isAdmin={isAdmin} />
         <div className="game-flex-layout">
         <PlayerRoles
           players={players}

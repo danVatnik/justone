@@ -7,6 +7,9 @@ function Lobby({ playerId, playerName, onStartGame, onLeaveLobby }) {
   const [isReady, setIsReady] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [error, setError] = useState('');
+  
+  // Check if isadmin=true in URL
+  const isAdmin = new URLSearchParams(window.location.search).get('isadmin') === 'true';
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -92,7 +95,7 @@ function Lobby({ playerId, playerName, onStartGame, onLeaveLobby }) {
 
   return (
     <>
-      <Header showLeaveButton={false} />
+      <Header showLeaveButton={false} isAdmin={isAdmin} />
       <div className="lobby-container">
       <div className="lobby-card">
         <h1>Game Lobby</h1>
