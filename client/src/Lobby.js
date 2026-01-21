@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './Lobby.css';
+import './Game.css';
 
 function Lobby({ playerId, playerName, onStartGame, onLeaveLobby }) {
   const [players, setPlayers] = useState([]);
@@ -90,7 +91,11 @@ function Lobby({ playerId, playerName, onStartGame, onLeaveLobby }) {
   const isHost = players.length > 0 && players[0].id === playerId;
 
   return (
-    <div className="lobby-container">
+    <>
+      <header className="app-header">
+        <div className="app-title">Just One</div>
+      </header>
+      <div className="lobby-container">
       <div className="lobby-card">
         <h1>Game Lobby</h1>
         
@@ -151,6 +156,7 @@ function Lobby({ playerId, playerName, onStartGame, onLeaveLobby }) {
         )}
       </div>
     </div>
+    </>
   );
 }
 

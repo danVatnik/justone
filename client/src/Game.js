@@ -19,6 +19,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
   const [submittedWords, setSubmittedWords] = useState({});
   const [selectedClues, setSelectedClues] = useState(new Set());
   const [selectedWords, setSelectedWords] = useState(new Set());
+  const [wordRevealed, setWordRevealed] = useState(false);
 
   useEffect(() => {
     fetchGameState();
@@ -221,6 +222,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
       if (response.ok) {
         setClueSubmitted(false);
         setSelectedClues(new Set());
+        setWordRevealed(false);
         fetchGameState();
       }
     } catch (err) {
@@ -432,7 +434,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
         {gameState === 'show-words-to-guesser' && (
           <div className="game-section">
             <h2>Submitted Words</h2>
-            {!isGuesser && <p className="original-word"><strong>{word}</strong></p>}
+            {(!isGuesser || wordRevealed) && <p className="original-word"><strong>{word}</strong></p>}
             {isGuesser ? (
               <div className="words-list">
                 {Object.entries(submittedWords).map(([pid, submittedWord], index) => (
@@ -457,7 +459,12 @@ function Game({ playerName, playerId, onLeaveLobby }) {
               </div>
             )}
             {isGuesser && (
-              <button onClick={handleGuesserDone} className="continue-button">Done</button>
+              <div className="button-group">
+                {!wordRevealed && (
+                  <button onClick={() => setWordRevealed(true)} className="reveal-button">Reveal Word</button>
+                )}
+                <button onClick={handleGuesserDone} className="continue-button">Done</button>
+              </div>
             )}
           </div>
         )}

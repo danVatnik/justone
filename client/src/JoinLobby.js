@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './JoinLobby.css';
+import './Game.css';
 
 function JoinLobby({ onJoinLobby }) {
   const [name, setName] = useState('');
@@ -76,33 +77,38 @@ function JoinLobby({ onJoinLobby }) {
   };
 
   return (
-    <div className="join-lobby-container">
-      <div className="join-lobby-card">
-        <h1>Join Game</h1>
-        <form onSubmit={handleJoin}>
-          <div className="form-group">
-            <label htmlFor="name">Enter Your Name:</label>
-            <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-                setError('');
-              }}
-              placeholder="Enter your name"
-              maxLength="20"
-              autoFocus
-            />
-          </div>
-          {error && <p className="error-message">{error}</p>}
-          <button type="submit" className="join-button">Join Lobby</button>
-        </form>
-        {isAdmin && players.length > 0 && (
-          <button onClick={handleReset} className="reset-lobby-button">Reset Lobby</button>
-        )}
+    <>
+      <header className="app-header">
+        <div className="app-title">Just One</div>
+      </header>
+      <div className="join-lobby-container">
+        <div className="join-lobby-card">
+            <h1>Join Game</h1>
+            <form onSubmit={handleJoin}>
+            <div className="form-group">
+                <label htmlFor="name">Enter Your Name:</label>
+                <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => {
+                    setName(e.target.value);
+                    setError('');
+                }}
+                placeholder="Enter your name"
+                maxLength="20"
+                autoFocus
+                />
+            </div>
+            {error && <p className="error-message">{error}</p>}
+            <button type="submit" className="join-button">Join Lobby</button>
+            </form>
+            {isAdmin && players.length > 0 && (
+            <button onClick={handleReset} className="reset-lobby-button">Reset Lobby</button>
+            )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
