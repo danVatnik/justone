@@ -286,7 +286,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
     <>
       <div className="game-container">
               <header className="app-header">
-        <div className="app-title">Just One</div>
+        <div className="app-title">Just</div>
         <button className="leave-button header-leave" onClick={onLeaveLobby}>Leave Game</button>
       </header>
         <div className="game-flex-layout">

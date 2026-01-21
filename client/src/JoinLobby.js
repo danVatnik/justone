@@ -79,7 +79,7 @@ function JoinLobby({ onJoinLobby }) {
   return (
     <>
       <header className="app-header">
-        <div className="app-title">Just One</div>
+        <div className="app-title">Just</div>
       </header>
       <div className="join-lobby-container">
         <div className="join-lobby-card">

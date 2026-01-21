@@ -93,7 +93,7 @@ function Lobby({ playerId, playerName, onStartGame, onLeaveLobby }) {
   return (
     <>
       <header className="app-header">
-        <div className="app-title">Just One</div>
+        <div className="app-title">Just</div>
       </header>
       <div className="lobby-container">
       <div className="lobby-card">
