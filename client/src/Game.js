@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import PlayerRoles from './PlayerRoles';
+import PlayersStatus from './PlayersStatus';
 import Header from './Header';
 import './Game.css';
 
@@ -163,6 +164,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
       if (response.ok) {
         setClueSubmitted(false);
         setSelectedClues(new Set());
+        setWordRevealed(false);
         fetchGameState();
       }
     } catch (err) {
@@ -339,23 +341,31 @@ function Game({ playerName, playerId, onLeaveLobby }) {
           <div className="game-section">
             <h2>The Word is: <span className="selected-word">{word}</span></h2>
             {submittedWords[playerId] ? (
-              <div className="word-submitted">
-                <p>✓ Your word: <strong>{submittedWords[playerId]}</strong></p>
-                <p className="waiting-others">Waiting for other players...</p>
-              </div>
+              <>
+                <div className="word-submitted">
+                  <p>✓ Your clue: <strong>{submittedWords[playerId]}</strong></p>
+                  <p className="waiting-others">Waiting for other players...</p>
+                </div>
+                <PlayersStatus 
+                players={players} 
+                submittedWords={submittedWords} 
+                excludePlayerIds={[playerId, guesser?.id].filter(Boolean)} 
+                />
+              </>
             ) : (
               <>
-                <p className="instruction">Enter a word related to it:</p>
+                <p className="instruction">Enter a clue related to it:</p>
                 <input 
                   type="text" 
                   value={wordInput}
                   onChange={(e) => setWordInput(e.target.value)}
-                  placeholder="Enter your word..." 
+                  onKeyDown={(e) => e.key === 'Enter' && handleSubmitWord()}
+                  placeholder="Enter your clue..." 
                   className="word-submission-input"
                   maxLength="30"
                   autoFocus
                 />
-                <button onClick={handleSubmitWord} className="submit-button">Submit Word</button>
+                <button onClick={handleSubmitWord} className="submit-button">Submit</button>
               </>
             )}
           </div>
@@ -363,22 +373,20 @@ function Game({ playerName, playerId, onLeaveLobby }) {
 
         {gameState === 'word-submission' && isGuesser && (
           <div className="game-section guesser-waiting">
-            <h2>Waiting for Word Submissions...</h2>
-            <p>Players are entering their words related to: <strong>{word}</strong></p>
+            <h2>Waiting for Clue Submissions...</h2>
+            <br/>
             <div className="spinner"></div>
-            <div className="players-status">
-              {players.filter(p => p.id !== playerId).map(player => (
-                <div key={player.id} className="status-item">
-                  {submittedWords[player.id] ? '✓' : '⏳'} {player.name}
-                </div>
-              ))}
-            </div>
+            <PlayersStatus 
+              players={players} 
+              submittedWords={submittedWords} 
+              excludePlayerIds={[playerId]} 
+            />
           </div>
         )}
 
         {gameState === 'display-words' && !isGuesser && (
           <div className="game-section">
-            <h2>Submitted Words</h2>
+            <h2>Submitted Clues</h2>
             <p className="original-word"><strong>{word}</strong></p>
             <div className="words-list">
               {Object.entries(submittedWords).map(([pid, submittedWord], index) => {
@@ -412,13 +420,13 @@ function Game({ playerName, playerId, onLeaveLobby }) {
                 className="delete-button"
                 disabled={selectedWords.size === 0}
               >
-                Delete Selected Words ({selectedWords.size})
+                Delete Selected Clues ({selectedWords.size})
               </button>
               <button 
                 onClick={handleConfirmWords} 
                 className="confirm-button"
               >
-                Confirm Words
+                Confirm Clues
               </button>
             </div>
           </div>
@@ -426,25 +434,33 @@ function Game({ playerName, playerId, onLeaveLobby }) {
 
         {gameState === 'display-words' && isGuesser && (
           <div className="game-section guesser-waiting">
-            <h2>Waiting for Word Confirmation...</h2>
-            <p>Other players are reviewing the submitted words</p>
+            <h2>Waiting for Clue Confirmation...</h2>
+            <p>Other players are reviewing the submitted clues</p>
             <div className="spinner"></div>
           </div>
         )}
 
         {gameState === 'show-words-to-guesser' && (
           <div className="game-section">
-            <h2>Submitted Words</h2>
+            <h2>Submitted Clues</h2>
             {(!isGuesser || wordRevealed) && <p className="original-word"><strong>{word}</strong></p>}
             {isGuesser ? (
-              <div className="words-list">
-                {Object.entries(submittedWords).map(([pid, submittedWord], index) => (
-                  <div key={pid} className="word-display-item">
-                    <span className="word-number">{index + 1}.</span>
-                    <span className="word-text">{submittedWord}</span>
+              <>
+                {Object.keys(submittedWords).length === 0 ? (
+                  <div className="no-words-message">
+                    <p>No clues were submitted after review.</p>
                   </div>
-                ))}
-              </div>
+                ) : (
+                  <div className="words-list">
+                    {Object.entries(submittedWords).map(([pid, submittedWord], index) => (
+                      <div key={pid} className="word-display-item">
+                        <span className="word-number">{index + 1}.</span>
+                        <span className="word-text">{submittedWord}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
             ) : (
               <div className="words-list">
                 {Object.entries(submittedWords).map(([pid, submittedWord], index) => {

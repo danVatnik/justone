@@ -5,7 +5,7 @@ function Header({ showLeaveButton, onLeaveLobby, isAdmin }) {
     <header className="app-header">
       <div className="header-left">
         <div className="app-title">Just</div>
-        <span className="version-number">v1.2.1</span>
+        <span className="version-number">v1.2.2</span>
         {isAdmin && <span className="admin-badge">Admin</span>}
       </div>
       {showLeaveButton && (
