@@ -104,6 +104,32 @@
   font-weight: 600;
   color: #222;
   font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.history-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  cursor: help;
+}
+
+.history-tag.guesser-tag {
+  background: #ff9999;
+  border: 1px solid #ff6b6b;
+}
+
+.history-tag.word-selector-tag {
+  background: #8fc9f7;
+  border: 1px solid #4dabf7;
 }
 
 .role-badge {

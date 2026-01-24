@@ -24,6 +24,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
   const [selectedWords, setSelectedWords] = useState(new Set());
   const [wordRevealed, setWordRevealed] = useState(false);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [roleHistory, setRoleHistory] = useState({ guessers: [], wordSelectors: [] });
   
   // Check if isadmin=true in URL
   const isAdmin = new URLSearchParams(window.location.search).get('isadmin') === 'true';
@@ -49,6 +50,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
         setScores(data.scores || {});
         setClues(data.clues || {});
         setSubmittedWords(data.submittedWords || {});
+        setRoleHistory(data.roleHistory || { guessers: [], wordSelectors: [] });
         // Check if current player has submitted a clue
         if (data.clues && data.clues[playerId]) {
           setClueSubmitted(true);
@@ -339,6 +341,7 @@ function Game({ playerName, playerId, onLeaveLobby }) {
           playerId={playerId}
           guesser={guesser}
           wordSelector={wordSelector}
+          roleHistory={roleHistory}
         />
         <div className="game-content">
         {gameState === 'waiting' && (

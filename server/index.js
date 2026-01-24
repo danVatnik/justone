@@ -20,6 +20,10 @@ let gameState = {
   submittedWords: {}, // playerId -> word
   clues: {},
   scores: {},
+  roleHistory: { // Track which players have had which roles
+    guessers: [], // Array of player IDs who have been guesser
+    wordSelectors: [] // Array of player IDs who have been word selector
+  },
   gamePhase: 'waiting' // 'waiting', 'word-selection', 'word-submission', 'display-words', 'clue-entry', 'clue-display', 'guessing', 'round-end'
 };
 
@@ -154,6 +158,12 @@ app.post('/api/lobby/start', (req, res) => {
   // Word selector is the second player, or first non-guesser
   gameState.wordSelector = players.length > 1 ? players[1] : players[0];
   
+  // Initialize role history
+  gameState.roleHistory = {
+    guessers: [players[0].id],
+    wordSelectors: [gameState.wordSelector.id]
+  };
+  
   gameState.gamePhase = 'word-selection';
   gameState.clues = {};
   gameState.scores = {};
@@ -196,7 +206,8 @@ app.get('/api/game/state', (req, res) => {
     clues: cluesForGuesser,
     scores: gameState.scores,
     gameState: gameState.gamePhase,
-    players: players
+    players: players,
+    roleHistory: gameState.roleHistory
   });
 });
 
@@ -325,6 +336,14 @@ app.post('/api/game/guesser-done', (req, res) => {
   const wordSelectorIndex = (nextGuesserIndex + 1) % players.length;
   gameState.wordSelector = players[wordSelectorIndex];
   
+  // Update role history
+  if (!gameState.roleHistory.guessers.includes(gameState.guesser.id)) {
+    gameState.roleHistory.guessers.push(gameState.guesser.id);
+  }
+  if (!gameState.roleHistory.wordSelectors.includes(gameState.wordSelector.id)) {
+    gameState.roleHistory.wordSelectors.push(gameState.wordSelector.id);
+  }
+  
   // Generate new word options for the word selector
   gameState.wordOptions = getRandomWords(5);
   
@@ -339,6 +358,12 @@ app.post('/api/game/next-round', (req, res) => {
   const currentGuesserIndex = players.findIndex(p => p.id === gameState.guesser?.id);
   const nextGuesserIndex = (currentGuesserIndex + 1) % players.length;
   gameState.guesser = players[nextGuesserIndex];
+  
+  // Update role history
+  if (!gameState.roleHistory.guessers.includes(gameState.guesser.id)) {
+    gameState.roleHistory.guessers.push(gameState.guesser.id);
+  }
+  
   gameState.gamePhase = 'clue-entry';
   res.json({ success: true });
 });
@@ -364,6 +389,15 @@ app.post('/api/game/admin-start-round', (req, res) => {
   gameState.word = '';
   gameState.guesser = guesserPlayer;
   gameState.wordSelector = wordSelectorPlayer;
+  
+  // Update role history
+  if (!gameState.roleHistory.guessers.includes(guesserPlayer.id)) {
+    gameState.roleHistory.guessers.push(guesserPlayer.id);
+  }
+  if (!gameState.roleHistory.wordSelectors.includes(wordSelectorPlayer.id)) {
+    gameState.roleHistory.wordSelectors.push(wordSelectorPlayer.id);
+  }
+  
   gameState.wordOptions = getRandomWords(5);
   gameState.gamePhase = 'word-selection';
   

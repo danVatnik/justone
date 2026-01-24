@@ -4,7 +4,6 @@ import './Lobby.css';
 
 function Lobby({ playerId, playerName, onStartGame, onLeaveLobby }) {
   const [players, setPlayers] = useState([]);
-  const [isReady, setIsReady] = useState(true);
   const [gameStarted, setGameStarted] = useState(false);
   const [error, setError] = useState('');
   
