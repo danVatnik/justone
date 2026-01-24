@@ -22,6 +22,9 @@ function Game({ playerName, playerId, onLeaveLobby }) {
   const [selectedClues, setSelectedClues] = useState(new Set());
   const [selectedWords, setSelectedWords] = useState(new Set());
   const [wordRevealed, setWordRevealed] = useState(false);
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [adminSelectedGuesser, setAdminSelectedGuesser] = useState('');
+  const [adminSelectedWordSelector, setAdminSelectedWordSelector] = useState('');
   
   // Check if isadmin=true in URL
   const isAdmin = new URLSearchParams(window.location.search).get('isadmin') === 'true';
@@ -284,6 +287,43 @@ function Game({ playerName, playerId, onLeaveLobby }) {
     }
   };
 
+  const handleAdminStartRound = async () => {
+    if (!adminSelectedGuesser || !adminSelectedWordSelector) {
+      alert('Please select both a guesser and a word selector');
+      return;
+    }
+    
+    if (adminSelectedGuesser === adminSelectedWordSelector) {
+      alert('Guesser and word selector must be different players');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/game/admin-start-round', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          guesserId: parseInt(adminSelectedGuesser),
+          wordSelectorId: parseInt(adminSelectedWordSelector)
+        })
+      });
+
+      if (response.ok) {
+        setClueSubmitted(false);
+        setSelectedClues(new Set());
+        setWordRevealed(false);
+        setShowAdminPanel(false);
+        fetchGameState();
+      } else {
+        const data = await response.json();
+        alert(data.error || 'Failed to start round');
+      }
+    } catch (err) {
+      console.error('Error starting admin round:', err);
+      alert('Error starting round');
+    }
+  };
+
 
   const isGuesser = guesser && guesser.id === playerId;
   const isWordSelector = wordSelector && wordSelector.id === playerId;
@@ -291,7 +331,64 @@ function Game({ playerName, playerId, onLeaveLobby }) {
   return (
     <>
       <div className="game-container">
-        <Header showLeaveButton={true} onLeaveLobby={onLeaveLobby} isAdmin={isAdmin} />
+        <Header 
+          showLeaveButton={true} 
+          onLeaveLobby={onLeaveLobby} 
+          isAdmin={isAdmin}
+          onAdminClick={() => setShowAdminPanel(!showAdminPanel)}
+        />
+        {showAdminPanel && isAdmin && (
+          <div className="admin-panel">
+            <div className="admin-panel-header">
+              <h3>Admin Panel</h3>
+              <button className="close-panel" onClick={() => setShowAdminPanel(false)}>✕</button>
+            </div>
+            <div className="admin-panel-content">
+              <h4>Start Custom Round</h4>
+              <div className="admin-control-group">
+                <label htmlFor="admin-guesser">Select Guesser:</label>
+                <select 
+                  id="admin-guesser"
+                  value={adminSelectedGuesser}
+                  onChange={(e) => setAdminSelectedGuesser(e.target.value)}
+                  className="admin-select"
+                >
+                  <option value="">-- Choose Player --</option>
+                  {players.map(player => (
+                    <option key={player.id} value={player.id}>
+                      {player.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              
+              <div className="admin-control-group">
+                <label htmlFor="admin-word-selector">Select Word Selector:</label>
+                <select 
+                  id="admin-word-selector"
+                  value={adminSelectedWordSelector}
+                  onChange={(e) => setAdminSelectedWordSelector(e.target.value)}
+                  className="admin-select"
+                >
+                  <option value="">-- Choose Player --</option>
+                  {players.map(player => (
+                    <option key={player.id} value={player.id}>
+                      {player.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              
+              <button 
+                onClick={handleAdminStartRound}
+                className="admin-start-button"
+                disabled={!adminSelectedGuesser || !adminSelectedWordSelector}
+              >
+                Start Round
+              </button>
+            </div>
+          </div>
+        )}
         <div className="game-flex-layout">
         <PlayerRoles
           players={players}

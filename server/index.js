@@ -343,6 +343,33 @@ app.post('/api/game/next-round', (req, res) => {
   res.json({ success: true });
 });
 
+// Admin: Start custom round with selected guesser and word selector
+app.post('/api/game/admin-start-round', (req, res) => {
+  const { guesserId, wordSelectorId } = req.body;
+  
+  const guesserPlayer = players.find(p => p.id === guesserId);
+  const wordSelectorPlayer = players.find(p => p.id === wordSelectorId);
+  
+  if (!guesserPlayer || !wordSelectorPlayer) {
+    return res.status(400).json({ error: 'Invalid player IDs' });
+  }
+  
+  if (guesserId === wordSelectorId) {
+    return res.status(400).json({ error: 'Guesser and word selector must be different players' });
+  }
+  
+  // Reset round state
+  gameState.submittedWords = {};
+  gameState.clues = {};
+  gameState.word = '';
+  gameState.guesser = guesserPlayer;
+  gameState.wordSelector = wordSelectorPlayer;
+  gameState.wordOptions = getRandomWords(5);
+  gameState.gamePhase = 'word-selection';
+  
+  res.json({ success: true });
+});
+
 // Old routes (kept for reference)
 app.get('/api/hello', (req, res) => {
   res.json({ message: 'Hello from Express backend!' });
