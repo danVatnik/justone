@@ -4,7 +4,7 @@ import './Lobby.css';
 
 function Lobby({ playerId, playerName, onStartGame, onLeaveLobby }) {
   const [players, setPlayers] = useState([]);
-  const [isReady, setIsReady] = useState(false);
+  const [isReady, setIsReady] = useState(true);
   const [gameStarted, setGameStarted] = useState(false);
   const [error, setError] = useState('');
   
@@ -34,23 +34,6 @@ function Lobby({ playerId, playerName, onStartGame, onLeaveLobby }) {
     const interval = setInterval(fetchPlayers, 1000);
     return () => clearInterval(interval);
   }, [onStartGame]);
-
-  const handleReady = async () => {
-    try {
-      const response = await fetch('/api/lobby/ready', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playerId, isReady: !isReady })
-      });
-
-      if (response.ok) {
-        setIsReady(!isReady);
-      }
-    } catch (err) {
-      setError('Error updating ready status');
-      console.error(err);
-    }
-  };
 
   const handleResetLobby = async () => {
     if (window.confirm('Are you sure you want to reset the lobby? All players will be removed.')) {
@@ -121,13 +104,6 @@ function Lobby({ playerId, playerName, onStartGame, onLeaveLobby }) {
         {error && <p className="error-message">{error}</p>}
 
         <div className="actions">
-          <button 
-            className={`ready-button ${isReady ? 'active' : ''}`}
-            onClick={handleReady}
-          >
-            {isReady ? '✓ Ready' : 'Mark as Ready'}
-          </button>
-          
           {isHost && allPlayersReady && players.length > 1 && (
             <button 
               className="start-button"

@@ -109,7 +109,7 @@ app.post('/api/lobby/join', (req, res) => {
   const player = {
     id: playerId,
     name: name,
-    isReady: false,
+    isReady: true,
     joinedAt: new Date()
   };
 
@@ -123,18 +123,6 @@ app.get('/api/lobby/players', (req, res) => {
     players: players,
     gameStarted: gameStarted
   });
-});
-
-// Mark player as ready
-app.post('/api/lobby/ready', (req, res) => {
-  const { playerId, isReady } = req.body;
-  
-  const player = players.find(p => p.id === playerId);
-  if (player) {
-    player.isReady = isReady;
-  }
-
-  res.json({ success: true });
 });
 
 // Start game (only if all players ready and at least 2 players)
