@@ -5,7 +5,7 @@ function Header({ showLeaveButton, onLeaveLobby, isAdmin, onAdminClick }) {
     <header className="app-header">
       <div className="header-left">
         <div className="app-title">Just</div>
-        <span className="version-number">v1.2.2</span>
+        <span className="version-number">v1.3.0</span>
         {isAdmin && <span className="admin-badge" onClick={onAdminClick} style={{cursor: 'pointer'}}>Admin</span>}
       </div>
       {showLeaveButton && (
