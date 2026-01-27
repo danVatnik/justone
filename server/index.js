@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 3001;
 let players = [];
 let gameStarted = false;
 let playerIdCounter = 0;
+let lobbyActive = false; // Indicates if there is an active lobby with at least one player
 
 // In-memory game state
 let gameState = {
@@ -118,6 +119,12 @@ app.post('/api/lobby/join', (req, res) => {
   };
 
   players.push(player);
+  
+  // Mark lobby as active when first player joins
+  if (!lobbyActive) {
+    lobbyActive = true;
+  }
+  
   res.json({ playerId, success: true });
 });
 
@@ -125,7 +132,8 @@ app.post('/api/lobby/join', (req, res) => {
 app.get('/api/lobby/players', (req, res) => {
   res.json({ 
     players: players,
-    gameStarted: gameStarted
+    gameStarted: gameStarted,
+    lobbyActive: lobbyActive
   });
 });
 
@@ -182,6 +190,7 @@ app.post('/api/lobby/start', (req, res) => {
 app.post('/api/lobby/reset', (req, res) => {
   players = [];
   gameStarted = false;
+  lobbyActive = false;
   res.json({ success: true });
 });
 
@@ -207,7 +216,8 @@ app.get('/api/game/state', (req, res) => {
     scores: gameState.scores,
     gameState: gameState.gamePhase,
     players: players,
-    roleHistory: gameState.roleHistory
+    roleHistory: gameState.roleHistory,
+    lobbyActive: lobbyActive
   });
 });
 

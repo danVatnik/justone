@@ -40,6 +40,13 @@ function Game({ playerName, playerId, onLeaveLobby }) {
       const response = await fetch(`/api/game/state?playerId=${playerId}`);
       if (response.ok) {
         const data = await response.json();
+        
+        // If lobby is not active, clear localStorage and return to join page
+        if (data.lobbyActive === false) {
+          onLeaveLobby();
+          return;
+        }
+        
         setGuesser(data.guesser);
         setWordSelector(data.wordSelector);
         setWord(data.word);

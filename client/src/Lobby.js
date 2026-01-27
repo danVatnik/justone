@@ -16,6 +16,13 @@ function Lobby({ playerId, playerName, onStartGame, onLeaveLobby }) {
         const response = await fetch('/api/lobby/players');
         if (response.ok) {
           const data = await response.json();
+          
+          // If lobby is not active, clear localStorage and return to join page
+          if (data.lobbyActive === false) {
+            onLeaveLobby();
+            return;
+          }
+          
           setPlayers(data.players || []);
           setGameStarted(data.gameStarted || false);
           
@@ -32,7 +39,7 @@ function Lobby({ playerId, playerName, onStartGame, onLeaveLobby }) {
     fetchPlayers();
     const interval = setInterval(fetchPlayers, 1000);
     return () => clearInterval(interval);
-  }, [onStartGame]);
+  }, [onStartGame, onLeaveLobby]);
 
   const handleResetLobby = async () => {
     if (window.confirm('Are you sure you want to reset the lobby? All players will be removed.')) {
