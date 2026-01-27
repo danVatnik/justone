@@ -80,7 +80,7 @@ function Lobby({ playerId, playerName, onStartGame, onLeaveLobby }) {
   };
 
   const allPlayersReady = players.length > 0 && players.every(p => p.isReady);
-  const isHost = players.length > 0 && players[0].id === playerId;
+  const isHost = isAdmin;
 
   return (
     <>

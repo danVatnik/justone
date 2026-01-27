@@ -5,7 +5,7 @@ import Header from './Header';
 import AdminPanel from './AdminPanel';
 import './Game.css';
 
-function Game({ playerName, playerId, onLeaveLobby }) {
+function Game({ playerName, playerId, onLeaveLobby, onRoleChange }) {
   const [round, setRound] = useState(1);
   const [guesser, setGuesser] = useState(null);
   const [wordSelector, setWordSelector] = useState(null);
@@ -324,6 +324,14 @@ function Game({ playerName, playerId, onLeaveLobby }) {
 
   const isGuesser = guesser && guesser.id === playerId;
   const isWordSelector = wordSelector && wordSelector.id === playerId;
+  const currentRole = isGuesser ? 'guesser' : isWordSelector ? 'word-selector' : 'editor';
+
+  // Update role in localStorage when it changes
+  useEffect(() => {
+    if (onRoleChange && currentRole) {
+      onRoleChange(currentRole);
+    }
+  }, [currentRole, onRoleChange]);
 
   return (
     <>
